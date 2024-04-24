@@ -24,18 +24,18 @@ void EditingJob::distributeWork(std::vector<Editor>& editors) {
     while (remainingImages > 0) {
         editors[editorIndex].editImages(1);
         --remainingImages;
-        editorIndex = (editorIndex + 1) % editors.size(); 
+        editorIndex = (editorIndex + 1) % editors.size();
     }
 }
 
 int EditingJob::calculateTotalTime(const std::vector<Editor>& editors) const {
-    
     double totalRate = std::accumulate(editors.begin(), editors.end(), 0.0,
                                        [](double sum, const Editor& editor) {
                                            return sum + editor.getRate();
                                        });
 
-    
     double totalTime = static_cast<double>(totalImages_) / totalRate;
-    return static_cast<int>(totalTime);
+    return totalTime > 0 ? static_cast<int>(totalTime) + 1 : 0; // Повертаємо час, округлений до більшого цілого числа
 }
+
+
